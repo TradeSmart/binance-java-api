@@ -15,6 +15,7 @@ import com.binance.api.client.domain.account.TradeHistoryItem;
 import com.binance.api.client.domain.account.WithdrawHistory;
 import com.binance.api.client.domain.account.WithdrawResult;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
+import com.binance.api.client.domain.brokerage.*;
 import com.binance.api.client.domain.event.ListenKey;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
@@ -177,4 +178,69 @@ public interface BinanceApiService {
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
   @DELETE("/api/v1/userDataStream")
   Call<Void> closeAliveUserDataStream(@Query("listenKey") String listenKey);
+
+  /**
+   * Brokerage functions
+   */
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/broker/info")
+  Call<BrokerInfo> getBrokerInfo(@Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @POST("/sapi/v1/broker/subAccount")
+  Call<SubAccountCreated> createSubAccount(@Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/broker/subAccount")
+  Call<List<SubAccount>> querySubAccount(@Query("subAccountId") String subAccountId, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @POST("/sapi/v1/broker/subAccount/margin")
+  Call<MarginEnable> enableSubAccountMargin(@Query("subAccountId") String subAccountId, @Query("margin") Boolean margin, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @POST("/sapi/v1/broker/subAccount/futures")
+  Call<FuturesEnable> enableSubAccountFutures(@Query("subAccountId") String subAccountId, @Query("futures") Boolean futures, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @POST("/sapi/v1/broker/subAccountApi")
+  Call<ApiKeyCreated> createSubAccountApiKey(
+          @Query("subAccountId") String subAccountId,
+          @Query("canTrade") Boolean canTrade,
+          @Query("marginTrade") Boolean marginTrade,
+          @Query("futuresTrade") Boolean futuresTrade,
+          @Query("recvWindow") Long recvWindow,
+          @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/broker/subAccountApi")
+  Call<List<ApiKey>> querySubAccountApiKey(
+          @Query("subAccountId") String subAccountId,
+          @Query("subAccountApiKey") String subAccountApiKey,
+          @Query("recvWindow") Long recvWindow,
+          @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @DELETE("/sapi/v1/broker/subAccountApi")
+  Call<Void> deleteSubAccountApiKey(
+          @Query("subAccountId") String subAccountId,
+          @Query("subAccountApiKey") String subAccountApiKey,
+          @Query("recvWindow") Long recvWindow,
+          @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @POST("/sapi/v1/broker/subAccountApi/commission")
+  Call<CommissionChanged> changeSubAccountCommission(
+          @Query("subAccountId") String subAccountId,
+          @Query("makerCommission") Double makerCommission,
+          @Query("takerCommission") Double takerCommission,
+          @Query("recvWindow") Long recvWindow,
+          @Query("timestamp") Long timestamp
+  );
+
 }

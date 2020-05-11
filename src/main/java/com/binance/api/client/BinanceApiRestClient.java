@@ -1,5 +1,6 @@
 package com.binance.api.client;
 
+import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.DepositAddress;
 import com.binance.api.client.domain.account.DepositHistory;
@@ -15,6 +16,7 @@ import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
+import com.binance.api.client.domain.brokerage.*;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.market.AggTrade;
@@ -295,4 +297,41 @@ public interface BinanceApiRestClient {
    * @param listenKey listen key that identifies a data stream
    */
   void closeUserDataStream(String listenKey);
+
+  /**
+   * Brokerage functions
+   */
+
+  BrokerInfo getBrokerInfo();
+
+  SubAccountCreated createSubAccount();
+
+  List<SubAccount> querySubAccount(String subAccountId);
+
+  MarginEnable enableSubAccountMargin(String subAccountId, Boolean margin);
+
+  FuturesEnable enableSubAccountFutures(String subAccountId, Boolean futures);
+
+  ApiKeyCreated createSubAccountApiKey(
+          String subAccountId,
+          Boolean canTrade,
+          Boolean marginTrade,
+          Boolean futuresTrade
+  );
+
+  List<ApiKey> querySubAccountApiKey(
+          String subAccountId,
+          String subAccountApiKey
+  );
+
+  void deleteSubAccountApiKey(
+          String subAccountId,
+          String subAccountApiKey
+  );
+
+  CommissionChanged changeSubAccountCommission(
+          String subAccountId,
+          Double makerCommission,
+          Double takerCommission
+  );
 }

@@ -5,6 +5,7 @@ import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.brokerage.*;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.market.*;
@@ -222,5 +223,65 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public void closeUserDataStream(String listenKey) {
     executeSync(binanceApiService.closeAliveUserDataStream(listenKey));
+  }
+
+  @Override
+  public BrokerInfo getBrokerInfo() {
+    return executeSync(binanceApiService.getBrokerInfo(BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public SubAccountCreated createSubAccount() {
+    return executeSync(binanceApiService.createSubAccount(BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public List<SubAccount> querySubAccount(String subAccountId) {
+    return executeSync(binanceApiService.querySubAccount(subAccountId, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public MarginEnable enableSubAccountMargin(String subAccountId, Boolean margin) {
+    return executeSync(binanceApiService.enableSubAccountMargin(subAccountId, margin, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FuturesEnable enableSubAccountFutures(String subAccountId, Boolean futures) {
+    return executeSync(binanceApiService.enableSubAccountFutures(subAccountId, futures, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public ApiKeyCreated createSubAccountApiKey(
+          String subAccountId,
+          Boolean canTrade,
+          Boolean marginTrade,
+          Boolean futuresTrade
+  ) {
+    return executeSync(binanceApiService.createSubAccountApiKey(subAccountId, canTrade, marginTrade, futuresTrade, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public List<ApiKey> querySubAccountApiKey(
+          String subAccountId,
+          String subAccountApiKey
+  ) {
+    return executeSync(binanceApiService.querySubAccountApiKey(subAccountId, subAccountApiKey, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public void deleteSubAccountApiKey(
+          String subAccountId,
+          String subAccountApiKey
+  ) {
+    executeSync(binanceApiService.deleteSubAccountApiKey(subAccountId, subAccountApiKey, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public CommissionChanged changeSubAccountCommission(
+          String subAccountId,
+          Double makerCommission,
+          Double takerCommission
+  ) {
+    return executeSync(binanceApiService.changeSubAccountCommission(subAccountId, makerCommission, takerCommission, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 }
